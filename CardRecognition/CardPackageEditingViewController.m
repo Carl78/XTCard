@@ -64,7 +64,7 @@
     return self;
 }
 
-#pragma mark -
+#pragma mark - Menu
 
 -(void)setupNavigationView {
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(41, 0, 100, 30)];
@@ -77,7 +77,6 @@
 }
 
 - (UIBarButtonItem *)rightMenuBarButtonItem {
-    
     UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(0,0,35,30)];
     [button setImage:[UIImage imageNamed:@"save"] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(rightSideMenuButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -106,7 +105,6 @@
 }
 
 - (UIBarButtonItem *)leftMenuBarButtonItem {
-    
     UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(0,0,30,30)];
     [button setImage:[UIImage imageNamed:@"return_back_normal"] forState:UIControlStateNormal];
     [button setImage:[UIImage imageNamed:@"return_back_pressed"] forState:UIControlStateSelected];
@@ -119,8 +117,16 @@
 }
 
 - (void)rightSideMenuButtonPressed:(id)sender {
-    self.operationBlock(self.targetView.textField.text);
-    [self.navigationController popViewControllerAnimated:YES];
+    NSString *text = self.targetView.textField.text;
+    if(text.length==0||text==nil){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"必填项不能为空" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        alert.delegate = self;
+        [alert show];
+    }
+    else{
+        self.operationBlock(self.targetView.textField.text);
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 #pragma mark -
@@ -145,15 +151,7 @@
     
     if ([name isEqualToString:@"手机 *"]||[name isEqualToString:@"姓名 *"]||[name isEqualToString:@"公司 *"]||[name isEqualToString:@"手机"]||[name isEqualToString:@"姓名"]||[name isEqualToString:@"公司"]) {
         [self.targetView.deleteButton setEnabled:NO];
-        if(TextField.text.length==0||TextField.text==nil){
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"必填项不能为空" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            alert.delegate = self;
-            [alert show];
-            
-        }
-        
     }
-    
 }
 
 

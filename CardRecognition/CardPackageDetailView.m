@@ -301,301 +301,143 @@
 }
 
 -(void)configCellInfo:(DBCard *)card {
-    
     keys = [[NSMutableArray alloc]init];
     values = [[NSMutableArray alloc]init];
     
     if(self.card.name!=nil){
-        
         NSArray *sep_str = [self.card.name componentsSeparatedByString:kSeparateChar];
-        
-        
-        
         for (NSString *str in sep_str) {
-            
-            //            [keys addObject:@"名字"];
             [keys addObject:@"姓名"];
             [values addObject:str];
-            
         }
-        
-    }
-    
-    //    if(self.card.sur_name!=nil){
-    //
-    //        NSArray *sep_str = [self.card.sur_name componentsSeparatedByString:@";"];
-    //
-    //
-    //
-    //        for (NSString *str in sep_str) {
-    //
-    //            [keys addObject:@"姓名"];
-    //
-    //            [values addObject:str];
-    //
-    //        }
-    //
-    //    }
-    
-    //    if(self.card.post_name!=nil){
-    //
-    //        NSArray *sep_str = [self.card.post_name componentsSeparatedByString:@";"];
-    //
-    //
-    //
-    //        for (NSString *str in sep_str) {
-    //
-    //            [keys addObject:@"名称"];
-    //
-    //            [values addObject:str];
-    //
-    //        }
-    //
-    //    }
-    
-    if(self.card.job_tel!=nil){
-        
-        NSArray *sep_str = [self.card.job_tel componentsSeparatedByString:kSeparateChar];
-        
-        
-        
-        for (NSString *str in sep_str) {
-            
-            [keys addObject:@"固话"];
-            
-            [values addObject:str];
-            
-        }
-        
-    }
-    
-    if(self.card.home_tel!=nil){
-        
-        NSArray *sep_str = [self.card.home_tel componentsSeparatedByString:kSeparateChar];
-        
-        
-        
-        for (NSString *str in sep_str) {
-            
-            [keys addObject:@"电话"];
-            
-            [values addObject:str];
-            
-        }
-        
-    }
-    
-    if(self.card.fax!=nil){
-        
-        NSArray *sep_str = [self.card.fax componentsSeparatedByString:kSeparateChar];
-        
-        
-        
-        for (NSString *str in sep_str) {
-            
-            [keys addObject:@"传真"];
-            
-            [values addObject:str];
-            
-        }
-        
     }
     
     if(self.card.mobile!=nil){
-        
         NSArray *sep_str = [self.card.mobile componentsSeparatedByString:kSeparateChar];
-        
-        
-        
         for (NSString *str in sep_str) {
-            
             [keys addObject:@"手机"];
-            
             [values addObject:str];
-            
         }
-        
     }
-    
+
+    if(self.card.company!=nil){
+        NSArray *sep_str = [self.card.company componentsSeparatedByString:kSeparateChar];
+        for (NSString *str in sep_str) {
+            [keys addObject:@"公司"];
+            [values addObject:str];
+        }
+    }
+
     if(self.card.mail!=nil){
-        
         NSArray *sep_str = [self.card.mail componentsSeparatedByString:kSeparateChar];
-        
-        
-        
         for (NSString *str in sep_str) {
-            
-            [keys addObject:@"邮件"];
-            
+            [keys addObject:@"邮箱"];
             [values addObject:str];
-            
         }
-        
-    }
-    
-    if(self.card.url!=nil){
-        
-        NSArray *sep_str = [self.card.url componentsSeparatedByString:kSeparateChar];
-        
-        
-        
-        for (NSString *str in sep_str) {
-            
-            [keys addObject:@"网址"];
-            
-            [values addObject:str];
-            
-        }
-        
     }
     
     if(self.card.title!=nil){
-        
         NSArray *sep_str = [self.card.title componentsSeparatedByString:kSeparateChar];
-        
-        
-        
         for (NSString *str in sep_str) {
-            
             [keys addObject:@"职称"];
-            
             [values addObject:str];
-            
         }
-        
     }
+
+//    if(self.card.department!=nil){
+//        NSArray *sep_str = [self.card.department componentsSeparatedByString:kSeparateChar];
+//        for (NSString *str in sep_str) {
+//            [keys addObject:@"部门"];
+//            [values addObject:str];
+//        }
+//    }
     
-    
-    
-    if(self.card.company!=nil){
-        
-        NSArray *sep_str = [self.card.company componentsSeparatedByString:kSeparateChar];
-        
-        
-        
+    if(self.card.job_tel!=nil){
+        NSArray *sep_str = [self.card.job_tel componentsSeparatedByString:kSeparateChar];
         for (NSString *str in sep_str) {
-            
-            [keys addObject:@"公司"];
-            
+            [keys addObject:@"固话"];
             [values addObject:str];
-            
         }
-        
     }
     
-    
+    if(self.card.fax!=nil){
+        NSArray *sep_str = [self.card.fax componentsSeparatedByString:kSeparateChar];
+        for (NSString *str in sep_str) {
+            [keys addObject:@"传真"];
+            [values addObject:str];
+        }
+    }
     
     if(self.card.address!=nil){
-        
         NSArray *sep_str = [self.card.address componentsSeparatedByString:kSeparateChar];
-        
-        
-        
         for (NSString *str in sep_str) {
-            
             [keys addObject:@"地址"];
-            
             [values addObject:str];
-            
         }
-        
     }
-    
     if(self.card.post_code!=nil){
-        
         NSArray *sep_str = [self.card.post_code componentsSeparatedByString:kSeparateChar];
-        
-        
-        
         for (NSString *str in sep_str) {
-            
             [keys addObject:@"邮编"];
-            
             [values addObject:str];
-            
         }
-        
     }
-    
+    if(self.card.url!=nil){
+        NSArray *sep_str = [self.card.url componentsSeparatedByString:kSeparateChar];
+        for (NSString *str in sep_str) {
+            [keys addObject:@"网址"];
+            [values addObject:str];
+        }
+    }
     if(self.card.note!=nil){
-        
         NSArray *sep_str = [self.card.note componentsSeparatedByString:kSeparateChar];
-        
-        
-        
         for (NSString *str in sep_str) {
-            
             [keys addObject:@"备注"];
-            
             [values addObject:str];
-            
         }
-        
     }
     
-    if(self.card.age!=nil){
-        
-        NSArray *sep_str = [self.card.age componentsSeparatedByString:kSeparateChar];
-        
-        
-        
-        for (NSString *str in sep_str) {
-            
-            [keys addObject:@"年龄"];
-            
-            [values addObject:str];
-            
-        }
-        
-    }
+
     
-    if(self.card.department!=nil){
-        
-        NSArray *sep_str = [self.card.department componentsSeparatedByString:kSeparateChar];
-        
-        
-        
-        for (NSString *str in sep_str) {
-            
-            [keys addObject:@"部门"];
-            
-            [values addObject:str];
-            
-        }
-        
-    }
+//    if(self.card.home_tel!=nil){
+//        NSArray *sep_str = [self.card.home_tel componentsSeparatedByString:kSeparateChar];
+//        for (NSString *str in sep_str) {
+//            [keys addObject:@"电话"];
+//            [values addObject:str];
+//        }
+//    }
+//    
+//    if(self.card.post_code!=nil){
+//        NSArray *sep_str = [self.card.post_code componentsSeparatedByString:kSeparateChar];
+//        for (NSString *str in sep_str) {
+//            [keys addObject:@"邮编"];
+//            [values addObject:str];
+//        }
+//    }
+//    
+//    if(self.card.age!=nil){
+//        NSArray *sep_str = [self.card.age componentsSeparatedByString:kSeparateChar];
+//        for (NSString *str in sep_str) {
+//            [keys addObject:@"年龄"];
+//            [values addObject:str];
+//        }
+//    }
+//    
+//    if(self.card.date!=nil){
+//        NSArray *sep_str = [self.card.date componentsSeparatedByString:kSeparateChar];
+//        for (NSString *str in sep_str) {
+//            [keys addObject:@"日期"];
+//            [values addObject:str];
+//        }
+//    }
     
-    if(self.card.date!=nil){
-        
-        NSArray *sep_str = [self.card.date componentsSeparatedByString:kSeparateChar];
-        
-        
-        
-        for (NSString *str in sep_str) {
-            
-            [keys addObject:@"日期"];
-            
-            [values addObject:str];
-            
-        }
-        
-    }
-    
-    if(self.card.birthday!=nil){
-        
-        NSArray *sep_str = [self.card.birthday componentsSeparatedByString:kSeparateChar];
-        
-        
-        
-        for (NSString *str in sep_str) {
-            
-            [keys addObject:@"生日"];
-            
-            [values addObject:str];
-            
-        }
-        
-    }
+//    if(self.card.birthday!=nil){
+//        NSArray *sep_str = [self.card.birthday componentsSeparatedByString:kSeparateChar];
+//        for (NSString *str in sep_str) {
+//            [keys addObject:@"生日"];
+//            [values addObject:str];
+//        }
+//    }
     
     NSMutableDictionary *section_1 = [[NSMutableDictionary alloc]init];
     for (int i=0;i<keys.count;i++) {
@@ -616,12 +458,8 @@
         for (DBGroup *group in groupArray) {
             
             if (group.Id == self.card.gid) {
-                
                 self.groupId = self.card.gid;
-                
                 self.groupName = group.name;
-                
-                
             }
             
         }
@@ -849,8 +687,8 @@
                 [poplistview setTitle:@"请选择分组"];
                 [poplistview show];
             }
-        }else{
-            
+        }
+        else{
             if ([keys[indexPath.row]isEqualToString: @"分组"]) {
                 if (groupArray.count<=0) {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您目前没有自定义分组" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -867,19 +705,16 @@
                     [poplistview show];
                 }
                 
-            }else{
-                
+            }
+            else
+            {
                 currentEditProperty = keys[indexPath.row];
-                
                 int keysCount = 0;
-                
                 for (int i=0;i<keys.count;i++) {
                     if ([currentEditProperty isEqualToString:keys[i]]) {
                         keysCount ++;
                     }
                 }
-                
-                
                 
                 index = indexPath.row;
                 
@@ -887,7 +722,6 @@
                 //nextViewController.count = count;
                 nextViewController.keyCount = keysCount;
                 [nextViewController setCompleteOpertion:^(NSString *newValue){
-                    
                     values[index] = newValue;
 //                    NSMutableDictionary *section_1 = [[NSMutableDictionary alloc]init];
 //                    for (int i=0;i<keys.count;i++) {
@@ -897,7 +731,6 @@
 //                    
 //                    //[dataArr setObject:newValue forKey:currentEditProperty];
 //                    [self.dataSourceArr setObject:section_1 atIndexedSubscript:0];//更新显示
-                    
                     
                     [self.theTableView reloadData];
                     //[self.dataSourceArr[indexPath.row][
@@ -916,7 +749,7 @@
             }
             
         }
-            }
+    }
     
 }
 

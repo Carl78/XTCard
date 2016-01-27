@@ -219,8 +219,6 @@
         if (self.hasPlusGroup) {
             
             NSMutableArray *section_plus = [NSMutableArray array];
-            
-            
             [self.cardIndexAndTagname enumerateKeysAndObjectsUsingBlock:^(NSNumber *key, NSString *obj, BOOL *stop) {
                 
                 NSString *value = [self.cardTagStoreDic objectForKey:obj];

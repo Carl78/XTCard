@@ -46,7 +46,7 @@
         [self.targetView.textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         
         
-        self.bakStr = value;
+        self.bakStr = name;
         
     }
     return self;
@@ -107,8 +107,16 @@
 }
 
 - (void)rightSideMenuButtonPressed:(id)sender {
-    self.operationBlock(self.targetView.textField.text);
-    [self.navigationController popViewControllerAnimated:YES];
+    NSString *text = self.targetView.textField.text;
+    if(text.length==0||text==nil){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"必填项不能为空" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        alert.delegate = self;
+        [alert show];
+    }
+    else{
+        self.operationBlock(self.targetView.textField.text);
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 #pragma mark -
@@ -133,13 +141,6 @@
     
     if ([name isEqualToString:@"手机 *"]||[name isEqualToString:@"姓名 *"]||[name isEqualToString:@"公司 *"]||[name isEqualToString:@"手机"]||[name isEqualToString:@"姓名"]||[name isEqualToString:@"公司"]) {
         [self.targetView.deleteButton setEnabled:NO];
-        if(TextField.text.length==0||TextField.text==nil){
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"必填项不能为空" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            alert.delegate = self;
-            [alert show];
-            
-        }
-        
     }
     
 }

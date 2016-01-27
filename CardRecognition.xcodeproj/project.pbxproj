@@ -530,6 +530,7 @@
 		654605C11AF78B90007C05F8 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				849066E21C58A36200C8F4DC /* View */,
 				6556E9CE1B1ED59D003F6834 /* PopupView */,
 				656B99CD1B07808F00205CCE /* Controller */,
 				655C7E381AFA352B00E77B73 /* Cells */,
@@ -632,8 +633,6 @@
 				657B22311B24839800CF12A7 /* CardMineAndSearchDetailController.m */,
 				65D79CCA1B26A2DB00F716ED /* UITextField+Other.h */,
 				65D79CCB1B26A2DB00F716ED /* UITextField+Other.m */,
-				657A74E01B293279009CC5D1 /* CardMineAndSearchDetailView.h */,
-				657A74E11B293279009CC5D1 /* CardMineAndSearchDetailView.m */,
 				656643651BE8948700299A2B /* CardGroupViewController.h */,
 				656643661BE8948700299A2B /* CardGroupViewController.m */,
 			);
@@ -970,8 +969,6 @@
 				65D9A2EF1B174DBD0062439A /* CardDetailViewController.m */,
 				6556E9C81B1E9066003F6834 /* WebCardDetailViewController.h */,
 				6556E9C91B1E9066003F6834 /* WebCardDetailViewController.m */,
-				65631EA61B253B4700892014 /* CardPackageDetailView.h */,
-				65631EA71B253B4700892014 /* CardPackageDetailView.m */,
 				657A74DD1B292F01009CC5D1 /* CardPackageEditingViewController.h */,
 				657A74DE1B292F01009CC5D1 /* CardPackageEditingViewController.m */,
 				653C97831B29A85300ADC15E /* PopLoginViewController.h */,
@@ -1056,8 +1053,6 @@
 		657B216E1B245CB700CF12A7 /* DetailView */ = {
 			isa = PBXGroup;
 			children = (
-				657B218F1B245D4F00CF12A7 /* CardDetailView.h */,
-				657B21901B245D4F00CF12A7 /* CardDetailView.m */,
 				657B21911B245D4F00CF12A7 /* ActivityManageView.h */,
 				657B21921B245D4F00CF12A7 /* ActivityManageView.m */,
 				657B21931B245D4F00CF12A7 /* CardDetailCell.h */,
@@ -1153,6 +1148,19 @@
 				65F9D90F1AFCF156009BC1F2 /* MLKMenuPopover.m */,
 			);
 			path = MenuPopover;
+			sourceTree = "<group>";
+		};
+		849066E21C58A36200C8F4DC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				65631EA61B253B4700892014 /* CardPackageDetailView.h */,
+				65631EA71B253B4700892014 /* CardPackageDetailView.m */,
+				657A74E01B293279009CC5D1 /* CardMineAndSearchDetailView.h */,
+				657A74E11B293279009CC5D1 /* CardMineAndSearchDetailView.m */,
+				657B218F1B245D4F00CF12A7 /* CardDetailView.h */,
+				657B21901B245D4F00CF12A7 /* CardDetailView.m */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

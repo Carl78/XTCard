@@ -185,65 +185,60 @@
             for (NSString *str in sep_str) {
                 [section_1 addObject:@{@"姓名":str,@"keyName":@"Name"}];
             }
-            
-            //[section_1 addObject:@{@"姓名":[NSString stringWithFormat:@"%@",self.card.Name],@"keyName":@"Name"}];
-        }
-        if (self.card.CompanyName) {
-            NSArray *sep_str = [self.card.CompanyName componentsSeparatedByString:kSeparateChar];
-            for (NSString *str in sep_str) {
-                [section_1 addObject:@{@"公司":str ,@"keyName":@"CompanyName"}];
-            }
-            
-            //[section_1 addObject:@{@"公司":[NSString stringWithFormat:@"%@",self.card.CompanyName] ,@"keyName":@"CompanyName"}];
-        }
-        if (self.card.Position) {
-            NSArray *sep_str = [self.card.Position componentsSeparatedByString:kSeparateChar];
-            for (NSString *str in sep_str) {
-                [section_1 addObject:@{@"职称":str,@"keyName":@"Postiton"}];
-            }
-            //[section_1 addObject:@{@"职称":[NSString stringWithFormat:@"%@",self.card.Position],@"keyName":@"Postiton"}];
         }
         if (self.card.Mobilphone) {
             NSArray *sep_str = [self.card.Mobilphone componentsSeparatedByString:kSeparateChar];
             for (NSString *str in sep_str) {
                 [section_1 addObject:@{@"手机":str,@"keyName":@"Mobilphone"}];
             }
-            //[section_1 addObject:@{@"手机":[NSString stringWithFormat:@"%@",self.card.Mobilphone],@"keyName":@"Mobilphone"}];
         }
-        if (self.card.Telephone) {
-            NSArray *sep_str = [self.card.Telephone componentsSeparatedByString:kSeparateChar];
+//        if (self.card.Mobilphone) {
+//            NSArray *sep_str = [self.card.Mobilphone componentsSeparatedByString:kSeparateChar];
+//            for (NSString *str in sep_str) {
+//                [section_1 addObject:@{@"手机":str,@"keyName":@"Mobilphone"}];
+//            }
+//        }
+        if (self.card.CompanyName) {
+            NSArray *sep_str = [self.card.CompanyName componentsSeparatedByString:kSeparateChar];
             for (NSString *str in sep_str) {
-                [section_1 addObject:@{@"固话":str,@"keyName":@"Telephone"}];
+                [section_1 addObject:@{@"公司":str ,@"keyName":@"CompanyName"}];
             }
-            //[section_1 addObject:@{@"固话":[NSString stringWithFormat:@"%@",self.card.Telephone],@"keyName":@"Telephone"}];
-        }
-        if (self.card.Fax) {
-            NSArray *sep_str = [self.card.Fax componentsSeparatedByString:kSeparateChar];
-            for (NSString *str in sep_str) {
-                [section_1 addObject:@{@"传真":str,@"keyName":@"Fax"}];
-            }
-            //[section_1 addObject:@{@"传真":[NSString stringWithFormat:@"%@",self.card.Fax],@"keyName":@"Fax"}];
         }
         if (self.card.Email) {
             NSArray *sep_str = [self.card.Email componentsSeparatedByString:kSeparateChar];
             for (NSString *str in sep_str) {
                 [section_1 addObject:@{@"邮箱":str,@"keyName":@"Email"}];
             }
-            //[section_1 addObject:@{@"邮箱":[NSString stringWithFormat:@"%@",self.card.Email],@"keyName":@"Email"}];
+        }
+        if (self.card.Position) {
+            NSArray *sep_str = [self.card.Position componentsSeparatedByString:kSeparateChar];
+            for (NSString *str in sep_str) {
+                [section_1 addObject:@{@"职称":str,@"keyName":@"Postiton"}];
+            }
+        }
+        if (self.card.Telephone) {
+            NSArray *sep_str = [self.card.Telephone componentsSeparatedByString:kSeparateChar];
+            for (NSString *str in sep_str) {
+                [section_1 addObject:@{@"固话":str,@"keyName":@"Telephone"}];
+            }
+        }
+        if (self.card.Fax) {
+            NSArray *sep_str = [self.card.Fax componentsSeparatedByString:kSeparateChar];
+            for (NSString *str in sep_str) {
+                [section_1 addObject:@{@"传真":str,@"keyName":@"Fax"}];
+            }
         }
         if (self.card.Address) {
             NSArray *sep_str = [self.card.Address componentsSeparatedByString:kSeparateChar];
             for (NSString *str in sep_str) {
                 [section_1 addObject:@{@"地址":str,@"keyName":@"Address"}];
             }
-            //[section_1 addObject:@{@"地址":[NSString stringWithFormat:@"%@",self.card.Address],@"keyName":@"Address"}];
         }
         if (self.card.Remark) {
             NSArray *sep_str = [self.card.Remark componentsSeparatedByString:kSeparateChar];
             for (NSString *str in sep_str) {
                 [section_1 addObject:@{@"备注":str,@"keyName":@"Remark"}];
             }
-            //[section_1 addObject:@{@"备注":[NSString stringWithFormat:@"%@",self.card.Remark],@"keyName":@"Remark"}];
         }
 //        NSArray *section_1 =
 //        @[
@@ -275,8 +270,6 @@
         if (self.hasPlusGroup) {
             
             NSMutableArray *section_plus = [NSMutableArray array];
-            
-            
             [self.cardIndexAndTagname enumerateKeysAndObjectsUsingBlock:^(NSNumber *key, NSString *obj, BOOL *stop) {
                 
                 NSString *value = [self.cardTagStoreDic objectForKey:obj];

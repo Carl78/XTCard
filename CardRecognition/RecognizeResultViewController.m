@@ -25,6 +25,9 @@
     NSMutableDictionary *result;
     NSMutableArray *keys;
     NSMutableArray *values;
+    //NSMutableArray *KK;
+    //NSMutableArray *VV;
+    
     UITableView *tableView;
     //数据库操作类
     DBOperation *db;
@@ -42,6 +45,9 @@
 @property (nonatomic,weak) UIImage *image;
 @property (nonatomic, strong) NSArray *defaultPropertyName;
 @property (nonatomic, strong)UIScrollView *scrollView;
+
+@property (nonatomic, strong) NSMutableArray *dataSourceArr;
+
 @end
 
 @implementation RecognizeResultViewController
@@ -81,19 +87,17 @@
     
     self.defaultPropertyName =
     @[@"姓名 *",
-      @"职称",
-      @"公司 *",
-      @"邮编",
-      @"传真",
       @"手机 *",
+      @"公司 *",
+      @"邮箱",
+      @"职称",
       @"固话",
-      @"邮件",
+      @"传真",
       @"地址",
+      @"邮编",
+      @"网址",
       @"备注"
       ];
-    
-    
-
     
     
     //
@@ -121,8 +125,8 @@
     self.navigationItem.titleView = titleLabel;
     
     //解析识别数据
-    keys = [[NSMutableArray alloc]init];
-    values = [[NSMutableArray alloc]init];
+    NSMutableArray *KKK = [[NSMutableArray alloc]init];
+    NSMutableArray *VVV = [[NSMutableArray alloc]init];
 
     //4IOS
     NSArray* pKeys = [result allKeys];
@@ -140,12 +144,12 @@
                     NSLog(@"keyName = %@",keyName);
 #endif
                     if ([keyName isEqualToString:@"姓名"]||[keyName isEqualToString:@"公司"]||[keyName isEqualToString:@"手机"]) {
-                        [keys addObject:[NSString stringWithFormat:@"%@ *",keyName]];
+                        [KKK addObject:[NSString stringWithFormat:@"%@ *",keyName]];
                     }else{
-                        [keys addObject:keyName];
+                        [KKK addObject:keyName];
                     }
 
-                    [values addObject:pPair.strText];
+                    [VVV addObject:pPair.strText];
                     
                     if ([keyName isEqualToString:@"姓名"]) {
                         strName = pPair.strText;
@@ -165,7 +169,135 @@
             //NSLog(@"the captured card image");
             self.image = (UIImage*)obj;
         }
+     }
+    
+    // 暂存识别信息
+    DBCard *card = [[DBCard alloc]init];
+    for (int i=0; i<KKK.count; i++) {
+        NSString *key = [KKK objectAtIndex:i];
+        if ([key isEqualToString:@"姓名 *"]) {
+            card.name = [self parseProperty:card.name appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"名字"]) {
+            card.sur_name = [self parseProperty:card.sur_name appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"名称"]) {
+            card.post_name = [self parseProperty:card.post_name appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"固话"]) {
+            card.job_tel = [self parseProperty:card.job_tel appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"电话"]) {
+            card.home_tel = [self parseProperty:card.home_tel appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"传真"]) {
+            
+            card.fax = [self parseProperty:card.fax appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"手机 *"]) {
+            card.mobile = [self parseProperty:card.mobile appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"邮件"]) {
+            card.mail = [self parseProperty:card.mail appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"网址"]) {
+            card.url = [self parseProperty:card.url appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"职称"]) {
+            card.title = [self parseProperty:card.title appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"公司 *"]) {
+            card.company = [self parseProperty:card.company appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"地址"]) {
+            card.address = [self parseProperty:card.address appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"邮编"]){
+            card.post_code = [self parseProperty:card.post_code appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"备注"]){
+            card.note = [self parseProperty:card.note appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"年龄"]) {
+            card.age = [self parseProperty:card.age appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"部门"]) {
+            card.department = [self parseProperty:card.department appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"生日"]) {
+            card.date = [self parseProperty:card.date appendValue:[VVV objectAtIndex:i]];
+        }else if ([key isEqualToString:@"日期"]) {
+            card.birthday = [self parseProperty:card.birthday appendValue:[VVV objectAtIndex:i]];
+        }
     }
+    
+    // 按指定顺序记录识别信息
+    keys = [[NSMutableArray alloc]init];
+    values = [[NSMutableArray alloc]init];
+    
+    if(card.name!=nil){
+        NSArray *sep_str = [card.name componentsSeparatedByString:kSeparateChar];
+        for (NSString *str in sep_str) {
+            [keys addObject:@"姓名 *"];
+            [values addObject:str];
+        }
+    }
+    if(card.mobile!=nil){
+        NSArray *sep_str = [card.mobile componentsSeparatedByString:kSeparateChar];
+        for (NSString *str in sep_str) {
+            [keys addObject:@"手机 *"];
+            [values addObject:str];
+        }
+    }
+    if(card.company!=nil){
+        NSArray *sep_str = [card.company componentsSeparatedByString:kSeparateChar];
+        for (NSString *str in sep_str) {
+            [keys addObject:@"公司 *"];
+            [values addObject:str];
+        }
+    }
+    if(card.mail!=nil){
+        NSArray *sep_str = [card.mail componentsSeparatedByString:kSeparateChar];
+        for (NSString *str in sep_str) {
+            [keys addObject:@"邮箱"];
+            [values addObject:str];
+        }
+    }
+    if(card.title!=nil){
+        NSArray *sep_str = [card.title componentsSeparatedByString:kSeparateChar];
+        for (NSString *str in sep_str) {
+            [keys addObject:@"职称"];
+            [values addObject:str];
+        }
+    }
+    if(card.job_tel!=nil){
+        NSArray *sep_str = [card.job_tel componentsSeparatedByString:kSeparateChar];
+        for (NSString *str in sep_str) {
+            [keys addObject:@"固话"];
+            [values addObject:str];
+        }
+    }
+    if(card.fax!=nil){
+        NSArray *sep_str = [card.fax componentsSeparatedByString:kSeparateChar];
+        for (NSString *str in sep_str) {
+            [keys addObject:@"传真"];
+            [values addObject:str];
+        }
+    }
+    if(card.address!=nil){
+        NSArray *sep_str = [card.address componentsSeparatedByString:kSeparateChar];
+        for (NSString *str in sep_str) {
+            [keys addObject:@"地址"];
+            [values addObject:str];
+        }
+    }
+    if(card.post_code!=nil){
+        NSArray *sep_str = [card.post_code componentsSeparatedByString:kSeparateChar];
+        for (NSString *str in sep_str) {
+            [keys addObject:@"邮编"];
+            [values addObject:str];
+        }
+    }
+    if(card.url!=nil){
+        NSArray *sep_str = [card.url componentsSeparatedByString:kSeparateChar];
+        for (NSString *str in sep_str) {
+            [keys addObject:@"网址"];
+            [values addObject:str];
+        }
+    }
+    if(card.note!=nil){
+        NSArray *sep_str = [card.note componentsSeparatedByString:kSeparateChar];
+        for (NSString *str in sep_str) {
+            [keys addObject:@"备注"];
+            [values addObject:str];
+        }
+    }
+
+
     // 4IOS
 
     
@@ -410,8 +542,6 @@
 - (void)saveCardData{
     //保存图片
     
-    
-    
     //保存到数据库
     DBCard *card = [[DBCard alloc]init];
     
@@ -434,7 +564,6 @@
         }else if ([key isEqualToString:@"电话"]) {
             card.home_tel = [self parseProperty:card.home_tel appendValue:[values objectAtIndex:i]];
         }else if ([key isEqualToString:@"传真"]) {
-            
             card.fax = [self parseProperty:card.fax appendValue:[values objectAtIndex:i]];
         }else if ([key isEqualToString:@"手机 *"]) {
             /*BOOL isValid = [IdentifierValidator isValid:IdentifierTypeMobilePhone value:[values objectAtIndex:i]];
@@ -461,7 +590,7 @@
         }else if ([key isEqualToString:@"地址"]) {
             card.address = [self parseProperty:card.address appendValue:[values objectAtIndex:i]];
         }else if ([key isEqualToString:@"邮编"]){
-            card.note = [self parseProperty:card.note appendValue:[values objectAtIndex:i]];
+            card.post_code = [self parseProperty:card.post_code appendValue:[values objectAtIndex:i]];
         }else if ([key isEqualToString:@"备注"]){
             card.note = [self parseProperty:card.note appendValue:[values objectAtIndex:i]];
         }else if ([key isEqualToString:@"年龄"]) {
@@ -538,61 +667,6 @@
         }
     }
 }
-
-#pragma mark - 左菜单创建函数
-- (UIBarButtonItem *)leftMenuBarButtonItem {
-    
-    UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(0,0,30,30)];
-    [button setImage:[UIImage imageNamed:@"icon_menu.png"] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(leftSideMenuButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [button setTitleEdgeInsets:UIEdgeInsetsMake(-1, -55, 0, 0)];
-    
-    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:button];
-    
-    return item;
-}
-#pragma mark - 右菜单创建函数
-- (UIBarButtonItem *)rightMenuBarButtonItem {
-    
-    UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(0,0,35,30)];
-    [button setImage:[UIImage imageNamed:@"save.png"] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(rightSideMenuButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:button];
-    
-    return item;
-}
-#pragma mark - 菜单创建函数
-- (void)setupMenuBarButtonItems {
-    UIBarButtonItem *negativeLeftSpacer = [[UIBarButtonItem alloc]
-                                           initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-                                           target:nil action:nil];
-    negativeLeftSpacer.width = -15;
-    self.navigationItem.leftBarButtonItems = @[negativeLeftSpacer, [self leftMenuBarButtonItem]];
-    //self.navigationItem.leftBarButtonItem = [self leftMenuBarButtonItem];
-    
-    UIBarButtonItem *negativeRightSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    negativeRightSpacer.width = -10;
-    self.navigationItem.rightBarButtonItems = @[negativeRightSpacer,[self rightMenuBarButtonItem]];
-    
-    //self.navigationItem.rightBarButtonItem = [self rightMenuBarButtonItem];
-}
-
-#pragma mark - 左菜单处理函数
-- (void)leftSideMenuButtonPressed:(id)sender {
-    /*[self.menuContainerViewController toggleLeftSideMenuCompletion:^{
-        [self setupMenuBarButtonItems];
-    }];*/
-    
-    [self.navigationController popToRootViewControllerAnimated:YES];
-
-}
-#pragma mark - 右菜单处理函数
-- (void)rightSideMenuButtonPressed:(id)sender {
-        
-    [self saveCardData];
-//    [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
 
 -(NSString *)getKeyName:(NSString *)key{
     
@@ -942,5 +1016,60 @@
     
     return YES;
 }
+
+
+#pragma mark - 菜单相关
+- (UIBarButtonItem *)leftMenuBarButtonItem {
+    
+    UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(0,0,30,30)];
+    [button setImage:[UIImage imageNamed:@"icon_menu.png"] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(leftSideMenuButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [button setTitleEdgeInsets:UIEdgeInsetsMake(-1, -55, 0, 0)];
+    
+    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:button];
+    
+    return item;
+}
+
+- (UIBarButtonItem *)rightMenuBarButtonItem {
+    
+    UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(0,0,35,30)];
+    [button setImage:[UIImage imageNamed:@"save.png"] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(rightSideMenuButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:button];
+    
+    return item;
+}
+
+- (void)setupMenuBarButtonItems {
+    UIBarButtonItem *negativeLeftSpacer = [[UIBarButtonItem alloc]
+                                           initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                           target:nil action:nil];
+    negativeLeftSpacer.width = -15;
+    self.navigationItem.leftBarButtonItems = @[negativeLeftSpacer, [self leftMenuBarButtonItem]];
+    //self.navigationItem.leftBarButtonItem = [self leftMenuBarButtonItem];
+    
+    UIBarButtonItem *negativeRightSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    negativeRightSpacer.width = -10;
+    self.navigationItem.rightBarButtonItems = @[negativeRightSpacer,[self rightMenuBarButtonItem]];
+    
+    //self.navigationItem.rightBarButtonItem = [self rightMenuBarButtonItem];
+}
+
+- (void)leftSideMenuButtonPressed:(id)sender {
+    /*[self.menuContainerViewController toggleLeftSideMenuCompletion:^{
+     [self setupMenuBarButtonItems];
+     }];*/
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    
+}
+
+- (void)rightSideMenuButtonPressed:(id)sender {
+    
+    [self saveCardData];
+    //    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
 
 @end
