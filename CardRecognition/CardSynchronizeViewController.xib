@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CardSynchronizeViewController">
+            <connections>
+                <outlet property="navigationBar" destination="2FQ-Qc-H9F" id="CNV-Dk-LSi"/>
+                <outlet property="tableView" destination="pYG-YV-hAw" id="AK1-Pv-IQp"/>
+                <outlet property="view" destination="YPx-SK-EDn" id="MBu-hZ-o4E"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="YPx-SK-EDn">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="pYG-YV-hAw">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="qqh-Od-OXL"/>
+                        <outlet property="delegate" destination="-1" id="wtX-Ly-UIh"/>
+                    </connections>
+                </tableView>
+                <navigationBar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2FQ-Qc-H9F">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="iC7-xa-40p"/>
+                    </constraints>
+                    <textAttributes key="titleTextAttributes">
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </textAttributes>
+                    <items>
+                        <navigationItem title="title" id="S5p-w3-naD"/>
+                    </items>
+                </navigationBar>
+            </subviews>
+            <color key="backgroundColor" red="0.95686274509803926" green="0.95686274509803926" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="pYG-YV-hAw" firstAttribute="top" secondItem="2FQ-Qc-H9F" secondAttribute="bottom" constant="-64" id="4vp-Ra-HsQ"/>
+                <constraint firstItem="pYG-YV-hAw" firstAttribute="leading" secondItem="YPx-SK-EDn" secondAttribute="leading" id="EXM-k4-N5a"/>
+                <constraint firstAttribute="bottom" secondItem="pYG-YV-hAw" secondAttribute="bottom" id="Lzf-Ws-Zt4"/>
+                <constraint firstItem="2FQ-Qc-H9F" firstAttribute="leading" secondItem="YPx-SK-EDn" secondAttribute="leading" id="UZV-1Y-FkZ"/>
+                <constraint firstAttribute="trailing" secondItem="pYG-YV-hAw" secondAttribute="trailing" id="XZl-mw-rHH"/>
+                <constraint firstItem="2FQ-Qc-H9F" firstAttribute="top" secondItem="YPx-SK-EDn" secondAttribute="top" id="c9c-FM-fV0"/>
+                <constraint firstAttribute="trailing" secondItem="2FQ-Qc-H9F" secondAttribute="trailing" id="g1C-Ag-jLQ"/>
+            </constraints>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+        </view>
+    </objects>
+</document>
