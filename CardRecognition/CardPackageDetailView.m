@@ -16,23 +16,17 @@
 #import "CustomOptionView.h"
 #import "CardDetailViewController.h"
 #import "AppConfig.h"
+#import "SVProgressHUD.h"
 
 #define kMenuCellBGColor 0xcccccc
 #define kAlertCallNumberTag 1000
 
 @interface CardPackageDetailView ()<UITableViewDataSource, UITableViewDelegate,UIPopoverListViewDataSource, UIPopoverListViewDelegate,UIScrollViewDelegate>{
     NSMutableArray *keys;
-    
     NSMutableArray *values;
-    
-    
-    
     NSMutableArray *groupArray;
-    
     DBOperation *db;
-    
     NSString *currentEditProperty;
-    
     int index;
     
     //after 1.0.4
@@ -55,6 +49,8 @@
 
 @property(nonatomic, strong) UIView *updataBackgroundView;
 @property(nonatomic, strong) UIButton *updataButton;
+@property(nonatomic, strong) UIButton *addPropertyButton;
+@property (nonatomic, strong) NSArray *defaultPropertyName;
 @property(nonatomic, strong) UIPageControl *pageControl;
 @property(nonatomic, strong) UIScrollView *scrollView;
 
@@ -76,6 +72,21 @@
     self = [super initWithFrame:frame];
     if (self) {
         
+        self.defaultPropertyName =
+        @[@"姓名 *",
+          @"手机 *",
+          @"公司 *",
+          @"邮箱",
+          @"职称",
+          @"固话",
+          @"传真",
+          @"地址",
+          @"邮编",
+          @"网址",
+          @"备注"
+          ];
+        
+
         CGFloat width = frame.size.width;
         CGFloat height = width /1600*960;
         
@@ -88,8 +99,6 @@
         //UIImage *image = [UIImage imageNamed:self.card.pic_name];
         [self.cardImageView setImage:image];
         //[self addSubview:self.cardImageView];
-        
-        
         
         self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, height)];
         //scrollView.backgroundColor = [UIColor redColor];
@@ -156,8 +165,6 @@
         self.scrollView.directionalLockEnabled = YES;
         [self addSubview:self.scrollView];
         
-        
-        
         self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width-100, self.scrollView.frame.size.height - 40, 100, 40)];
         [self.pageControl setBackgroundColor:[UIColor clearColor]];
         self.pageControl.currentPageIndicatorTintColor = [UIColor grayColor];
@@ -166,34 +173,12 @@
         self.pageControl.numberOfPages = 2;
         [self addSubview:self.pageControl];
         
-        
-        
-        
-        //test end
-        
-//        UIButton *addPropertyBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//                                    
-//        addPropertyBtn.frame = CGRectMake(10, height+2, frame.size.width/2-15, 42);
-//        [addPropertyBtn setTitle:@"添加属性" forState:UIControlStateNormal];
-////        addPropertyBtn.backgroundColor = [UIColor lightGrayColor];
-//        [addPropertyBtn addTarget:self action:@selector(addProperty:) forControlEvents:UIControlEventTouchUpInside];
-//        [self addSubview:addPropertyBtn];
-        
-        
-//        UIButton *detelePropertyBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-//        detelePropertyBtn.frame = CGRectMake(frame.size.width/2+5, height+2, frame.size.width/2-15, 42);
-//        [detelePropertyBtn setTitle:@"删除属性" forState:UIControlStateNormal];
-//        [detelePropertyBtn addTarget:self action:@selector(deleteProperty:) forControlEvents:UIControlEventTouchUpInside];
-//        [self addSubview:detelePropertyBtn];
-        
         self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, height, frame.size.width, frame.size.height-height) style:UITableViewStylePlain];
         self.theTableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
         self.theTableView.delegate = self;
         self.theTableView.dataSource = self;
         self.theTableView.bounces = YES;
         self.theTableView.showsVerticalScrollIndicator = YES;
-        
-        //        self.theTableView.estimatedRowHeight = 60;
         self.theTableView.rowHeight = 44;
         
         self.updataBackgroundView = [[UIView alloc]initWithFrame:CGRectMake(0, self.theTableView.frame.size.height+height, self.frame.size.width, 45)];
@@ -201,8 +186,8 @@
         [self insertSubview:self.updataBackgroundView aboveSubview:self.theTableView];
         //        [self addSubview:self.updataBackgroundView];
         
-        self.updataButton = [[UIButton alloc]initWithFrame:CGRectMake(5, 0, self.updataBackgroundView.frame.size.width-10, 40)];
-        
+        self.updataButton = [[UIButton alloc]initWithFrame:CGRectMake(5, 0, self.updataBackgroundView.frame.size.width/2-10, 40)];
+        //self.updataButton = [[UIButton alloc]initWithFrame:CGRectMake(5, 0, self.updataBackgroundView.frame.size.width-10, 40)];
         self.updataButton.layer.masksToBounds = YES;
         self.updataButton.layer.cornerRadius = 2.0f;
         self.updataButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
@@ -210,8 +195,31 @@
         [self.updataButton setTitle:@"更新名片" forState:UIControlStateNormal];
         [self.updataButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [self.updataButton addTarget:self action:@selector(updateCard) forControlEvents:UIControlEventTouchUpInside];
-
         [self.updataBackgroundView addSubview:self.updataButton];
+        
+        self.addPropertyButton =[[UIButton alloc]initWithFrame:CGRectMake(self.updataBackgroundView.frame.size.width/2+5, 0, self.updataBackgroundView.frame.size.width/2-10, 40)];
+        self.addPropertyButton.layer.cornerRadius = 2.0f;
+        self.addPropertyButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        self.addPropertyButton.layer.borderWidth = 0.5f;
+        [self.addPropertyButton setTitle:@"添加属性" forState:UIControlStateNormal];
+        [self.addPropertyButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [self.addPropertyButton addTarget:self action:@selector(addProperty:) forControlEvents:UIControlEventTouchUpInside];
+        [self.updataBackgroundView addSubview:self.addPropertyButton];
+
+        
+        //        UIButton *addPropertyBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        //        addPropertyBtn.frame = CGRectMake(10, height+2, frame.size.width/2-15, 42);
+        //        [addPropertyBtn setTitle:@"添加属性" forState:UIControlStateNormal];
+        ////        addPropertyBtn.backgroundColor = [UIColor lightGrayColor];
+        //        [addPropertyBtn addTarget:self action:@selector(addProperty:) forControlEvents:UIControlEventTouchUpInside];
+        //        [self addSubview:addPropertyBtn];
+        
+        
+        //        UIButton *detelePropertyBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        //        detelePropertyBtn.frame = CGRectMake(frame.size.width/2+5, height+2, frame.size.width/2-15, 42);
+        //        [detelePropertyBtn setTitle:@"删除属性" forState:UIControlStateNormal];
+        //        [detelePropertyBtn addTarget:self action:@selector(deleteProperty:) forControlEvents:UIControlEventTouchUpInside];
+        //        [self addSubview:detelePropertyBtn];
         
         [self addSubview:self.theTableView];
     }
@@ -228,78 +236,7 @@
     return name;
 }
 
--(void)updateCard{
-    //保存到数据库
-    DBCard *card = [[DBCard alloc]init];
     
-    for (int i=0; i<keys.count; i++) {
-        NSString *key = [keys objectAtIndex:i];
-        if ([key isEqualToString:@"姓名"]) {
-            card.name = [self parseProperty:card.name appendValue:[values objectAtIndex:i]];
-        }
-//        if ([key isEqualToString:@"名字"]) {
-//            card.name = [self parseProperty:card.name appendValue:[values objectAtIndex:i]];
-//        }
-//        else if ([key isEqualToString:@"姓名"]) {
-//            card.sur_name = [self parseProperty:card.sur_name appendValue:[values objectAtIndex:i]];
-//        }else if ([key isEqualToString:@"名称"]) {
-//            card.post_name = [self parseProperty:card.post_name appendValue:[values objectAtIndex:i]];
-//        }
-        else if ([key isEqualToString:@"固话"]) {
-            card.job_tel = [self parseProperty:card.job_tel appendValue:[values objectAtIndex:i]];
-        }else if ([key isEqualToString:@"电话"]) {
-            card.home_tel = [self parseProperty:card.home_tel appendValue:[values objectAtIndex:i]];
-        }else if ([key isEqualToString:@"传真"]) {
-            card.fax = [self parseProperty:card.fax appendValue:[values objectAtIndex:i]];
-        }else if ([key isEqualToString:@"手机"]) {
-            card.mobile = [self parseProperty:card.mobile appendValue:[values objectAtIndex:i]];
-        }else if ([key isEqualToString:@"邮件"]) {
-            card.mail = [self parseProperty:card.mail appendValue:[values objectAtIndex:i]];
-        }else if ([key isEqualToString:@"网址"]) {
-            card.url = [self parseProperty:card.url appendValue:[values objectAtIndex:i]];
-        }else if ([key isEqualToString:@"职称"]) {
-            card.title = [self parseProperty:card.title appendValue:[values objectAtIndex:i]];
-        }else if ([key isEqualToString:@"公司"]) {
-            card.company = [self parseProperty:card.company appendValue:[values objectAtIndex:i]];
-        }else if ([key isEqualToString:@"地址"]) {
-            card.address = [self parseProperty:card.address appendValue:[values objectAtIndex:i]];
-        }else if ([key isEqualToString:@"邮编"]){
-            card.note = [self parseProperty:card.note appendValue:[values objectAtIndex:i]];
-        }else if ([key isEqualToString:@"备注"]){
-            card.note = [self parseProperty:card.note appendValue:[values objectAtIndex:i]];
-        }else if ([key isEqualToString:@"年龄"]) {
-            card.age = [self parseProperty:card.age appendValue:[values objectAtIndex:i]];
-        }else if ([key isEqualToString:@"部门"]) {
-            card.department = [self parseProperty:card.department appendValue:[values objectAtIndex:i]];
-        }else if ([key isEqualToString:@"生日"]) {
-            card.date = [self parseProperty:card.date appendValue:[values objectAtIndex:i]];
-        }else if ([key isEqualToString:@"日期"]) {
-            card.birthday = [self parseProperty:card.birthday appendValue:[values objectAtIndex:i]];
-        }
-    }
-    
-    card.Id= self.card.Id;
-    //分组信息
-
-    card.gid =  [NSNumber numberWithInt:self.groupId];
-    
-    //名片创建时间
-    card.create_time = self.card.create_time;
-    
-    card.pic_name = self.card.pic_name;
-    
-    [db UpdateCard:card];
-    if (self.isEdittingCard) {
-        [self setCardEditting:NO];
-    }
-    if (self.parentViewController && [self.parentViewController isKindOfClass:[CardDetailViewController class]]) {
-        CardDetailViewController *vc = (CardDetailViewController *)self.parentViewController;
-        vc.isEdittingCard = NO;
-    }
-    self.card = card;
-    [self.theTableView reloadData];
-}
-
 -(void)configCellInfo:(DBCard *)card {
     keys = [[NSMutableArray alloc]init];
     values = [[NSMutableArray alloc]init];
@@ -504,7 +441,7 @@
          @{@"手机":[NSString stringWithFormat:@"%@",self.card.Mobilphone],@"keyName":@"Mobilphone"},
          @{@"固话":[NSString stringWithFormat:@"%@",self.card.Telephone],@"keyName":@"Telephone"},
          @{@"传真":[NSString stringWithFormat:@"%@",self.card.Fax],@"keyName":@"Fax"},
-         @{@"邮件":[NSString stringWithFormat:@"%@",self.card.Email],@"keyName":@"Email"},
+         @{@"邮箱":[NSString stringWithFormat:@"%@",self.card.Email],@"keyName":@"Email"},
          @{@"地址":[NSString stringWithFormat:@"%@",self.card.Address],@"keyName":@"Address"},
          @{@"备注":[NSString stringWithFormat:@"%@",self.card.Remark],@"keyName":@"Remark"}
          ];
@@ -551,7 +488,6 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CardDetailViewCellIdentifier];
     CardDetailCell *cardDetailCell = [tableView dequeueReusableCellWithIdentifier:CardDetailCellIdentifier];
     
-    
     //
     /*if (indexPath.section == self.dataSourceArr.count - 1) {
         if (!cell) {
@@ -568,13 +504,10 @@
         return cell;
     }*/
     
-    
-    //
     if (!cardDetailCell) {
         cardDetailCell = [[CardDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CardDetailCellIdentifier];
         cardDetailCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    
     
     NSMutableDictionary *dataArr = self.dataSourceArr[indexPath.section];
     //NSMutableDictionary *dataDic = [dataArr[indexPath.row] mutableCopy];
@@ -582,10 +515,9 @@
     //NSString *detailText = [dataArr objectForKey:keys[indexPath.row]];
     if (indexPath.section==0) {
         if (self.isEdittingCard) {
-            if ([keys[indexPath.row] isEqualToString:@"姓名"] || [keys[indexPath.row] isEqualToString:@"手机"]||[keys[indexPath.row] isEqualToString:@"公司"]){
-                
+            if ([keys[indexPath.row] isEqualToString:@"姓名"] || [keys[indexPath.row] isEqualToString:@"手机"]||[keys[indexPath.row] isEqualToString:@"公司"])
+            {
                 NSString *str = [NSString stringWithFormat:@"%@ *",[keys objectAtIndex:indexPath.row]];
-                
                 [cardDetailCell setupTitle:str andContent:[values objectAtIndex:indexPath.row]];
             }else{
                 [cardDetailCell setupTitle:[keys objectAtIndex:indexPath.row] andContent:[values objectAtIndex:indexPath.row]];
@@ -602,13 +534,13 @@
     if (self.isEdittingCard) {
         cardDetailCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cardDetailCell.accessoryView = nil;
-    }else{
+    }
+    else{
         cardDetailCell.accessoryType = UITableViewCellAccessoryNone;
         
         if ([keys[indexPath.row] isEqualToString:@"手机"] || [keys[indexPath.row] isEqualToString:@"固话"]) {
             UIImage *img = [UIImage imageNamed:@"call_phone_pressed.png"];
             CGSize originSize = img.size;
-            
             
             //  将图片缩放到理想大小,再绘入cell自带imageView中
             CGSize itemSize = CGSizeMake(originSize.width/4*3, originSize.height/4*3);
@@ -855,7 +787,22 @@
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (alertView.tag == kAlertCallNumberTag && buttonIndex == 1) {
+        // 拨打电话
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",self.numberMaybeCall]]];
+    }
+    else if (alertView.tag == 1001 && buttonIndex == 1) {
+        // 添加属性
+        NSString *key = alertView.message;
+        NSString *value = [alertView textFieldAtIndex:0].text;
+        
+        if (value==nil || [[value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {
+            [SVProgressHUD showErrorWithStatus:@"无效内容, 无法添加" duration:1];
+        }else{
+            [keys addObject:key];
+            [values addObject:value];
+            
+            [self.theTableView reloadData];
+        }
     }
 }
 
@@ -876,8 +823,97 @@
     [alert show];
     
     self.numberMaybeCall = detailText;
-    
 }
+
+-(void)updateCard{
+    DBCard *card = [[DBCard alloc]init];
+    
+    for (int i=0; i<keys.count; i++) {
+        NSString *key = [keys objectAtIndex:i];
+        if ([key isEqualToString:@"姓名"]) {
+            card.name = [self parseProperty:card.name appendValue:[values objectAtIndex:i]];
+        }
+        //        if ([key isEqualToString:@"名字"]) {
+        //            card.name = [self parseProperty:card.name appendValue:[values objectAtIndex:i]];
+        //        }
+        //        else if ([key isEqualToString:@"姓名"]) {
+        //            card.sur_name = [self parseProperty:card.sur_name appendValue:[values objectAtIndex:i]];
+        //        }else if ([key isEqualToString:@"名称"]) {
+        //            card.post_name = [self parseProperty:card.post_name appendValue:[values objectAtIndex:i]];
+        //        }
+        else if ([key isEqualToString:@"固话"]) {
+            card.job_tel = [self parseProperty:card.job_tel appendValue:[values objectAtIndex:i]];
+        }else if ([key isEqualToString:@"电话"]) {
+            card.home_tel = [self parseProperty:card.home_tel appendValue:[values objectAtIndex:i]];
+        }else if ([key isEqualToString:@"传真"]) {
+            card.fax = [self parseProperty:card.fax appendValue:[values objectAtIndex:i]];
+        }else if ([key isEqualToString:@"手机"]) {
+            card.mobile = [self parseProperty:card.mobile appendValue:[values objectAtIndex:i]];
+        }else if ([key isEqualToString:@"邮箱"]) {
+            card.mail = [self parseProperty:card.mail appendValue:[values objectAtIndex:i]];
+        }else if ([key isEqualToString:@"网址"]) {
+            card.url = [self parseProperty:card.url appendValue:[values objectAtIndex:i]];
+        }else if ([key isEqualToString:@"职称"]) {
+            card.title = [self parseProperty:card.title appendValue:[values objectAtIndex:i]];
+        }else if ([key isEqualToString:@"公司"]) {
+            card.company = [self parseProperty:card.company appendValue:[values objectAtIndex:i]];
+        }else if ([key isEqualToString:@"地址"]) {
+            card.address = [self parseProperty:card.address appendValue:[values objectAtIndex:i]];
+        }else if ([key isEqualToString:@"邮编"]){
+            card.note = [self parseProperty:card.note appendValue:[values objectAtIndex:i]];
+        }else if ([key isEqualToString:@"备注"]){
+            card.note = [self parseProperty:card.note appendValue:[values objectAtIndex:i]];
+        }else if ([key isEqualToString:@"年龄"]) {
+            card.age = [self parseProperty:card.age appendValue:[values objectAtIndex:i]];
+        }else if ([key isEqualToString:@"部门"]) {
+            card.department = [self parseProperty:card.department appendValue:[values objectAtIndex:i]];
+        }else if ([key isEqualToString:@"生日"]) {
+            card.date = [self parseProperty:card.date appendValue:[values objectAtIndex:i]];
+        }else if ([key isEqualToString:@"日期"]) {
+            card.birthday = [self parseProperty:card.birthday appendValue:[values objectAtIndex:i]];
+        }
+    }
+    
+    card.Id= self.card.Id;
+    //分组信息
+    
+    card.gid =  [NSNumber numberWithInt:self.groupId];
+    
+    //名片创建时间
+    card.create_time = self.card.create_time;
+    card.pic_name = self.card.pic_name;
+    
+    [db UpdateCard:card];
+    
+    if (self.isEdittingCard) {
+        [self setCardEditting:NO];
+    }
+    if (self.parentViewController && [self.parentViewController isKindOfClass:[CardDetailViewController class]]) {
+        CardDetailViewController *vc = (CardDetailViewController *)self.parentViewController;
+        vc.isEdittingCard = NO;
+    }
+    self.card = card;
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+                                                    message:@"更新成功"
+                                                   delegate:nil
+                                          cancelButtonTitle:@"确定"
+                                          otherButtonTitles:nil];
+    [alert show];
+    
+    [self.theTableView reloadData];
+}
+
+-(void)addProperty:(UIButton *)sender{
+    CustomOptionView *view = [[CustomOptionView alloc]initWithParams:self.defaultPropertyName defaultSelectIndex:-1];
+    [view didSelectIndexPath:^(NSIndexPath *indexPath, NSString *context, NSInteger tag) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"添加属性" message:[NSString stringWithFormat:@"%@",context] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+        alertView.tag = 1001;
+        [alertView show];
+    }];
+}
+
 
 //-(void)addProperty:(UIButton *)sender{
 //    
@@ -911,7 +947,7 @@
 //            self.card.mobile = @"";
 //        }else if ([context isEqualToString:@"固话"]){
 //            self.card.job_tel = @"";
-//        }else if ([context isEqualToString:@"邮件"]){
+//        }else if ([context isEqualToString:@"邮箱"]){
 //            self.card.mail = @"";
 //        }else if ([context isEqualToString:@"地址"]){
 //            self.card.address = @"";
@@ -948,7 +984,7 @@
 //        return NO;
 //    }
 //    if (self.card.mail == nil || [self.card.mail isEqualToString:@""]) {
-//        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"警告" message:@"邮件不能为空,请填写完整" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+//        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"警告" message:@"邮箱不能为空,请填写完整" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
 //        [alertView show];
 //        return NO;
 //    }

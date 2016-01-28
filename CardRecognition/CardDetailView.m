@@ -177,10 +177,8 @@
 -(NSArray *)dataSourceArr{
     
     if (_isChangedDataSource) {
-        
         NSMutableArray *section_1 = [NSMutableArray array];
         if (self.card.Name) {
-            
             NSArray *sep_str = [self.card.Name componentsSeparatedByString:kSeparateChar];
             for (NSString *str in sep_str) {
                 [section_1 addObject:@{@"姓名":str,@"keyName":@"Name"}];
@@ -192,12 +190,6 @@
                 [section_1 addObject:@{@"手机":str,@"keyName":@"Mobilphone"}];
             }
         }
-//        if (self.card.Mobilphone) {
-//            NSArray *sep_str = [self.card.Mobilphone componentsSeparatedByString:kSeparateChar];
-//            for (NSString *str in sep_str) {
-//                [section_1 addObject:@{@"手机":str,@"keyName":@"Mobilphone"}];
-//            }
-//        }
         if (self.card.CompanyName) {
             NSArray *sep_str = [self.card.CompanyName componentsSeparatedByString:kSeparateChar];
             for (NSString *str in sep_str) {
@@ -240,19 +232,6 @@
                 [section_1 addObject:@{@"备注":str,@"keyName":@"Remark"}];
             }
         }
-//        NSArray *section_1 =
-//        @[
-//          @{@"姓名":[NSString stringWithFormat:@"%@",self.card.Name],@"keyName":@"Name"},
-//          @{@"公司":[NSString stringWithFormat:@"%@",self.card.CompanyName] ,@"keyName":@"CompanyName"},
-//          @{@"职称":[NSString stringWithFormat:@"%@",self.card.Position],@"keyName":@"Postiton"},
-//          @{@"手机":[NSString stringWithFormat:@"%@",self.card.Mobilphone],@"keyName":@"Mobilphone"},
-//          @{@"固话":[NSString stringWithFormat:@"%@",self.card.Telephone],@"keyName":@"Telephone"},
-//          @{@"传真":[NSString stringWithFormat:@"%@",self.card.Fax],@"keyName":@"Fax"},
-//          @{@"邮箱":[NSString stringWithFormat:@"%@",self.card.Email],@"keyName":@"Email"},
-//          @{@"地址":[NSString stringWithFormat:@"%@",self.card.Address],@"keyName":@"Address"},
-//          @{@"备注":[NSString stringWithFormat:@"%@",self.card.Remark],@"keyName":@"Remark"}
-//          ];
-        
         
         NSArray *section_2 =
   @[@{@"分组":[NSString stringWithFormat:@"%@",self.card.GroupName],@"keyName":@"GroupName"},
@@ -463,7 +442,6 @@
                       newValue:(NSString *)newValue
 {
     if ([name isEqualToString:@"姓名"]) {
-//        self.card.Name = [NSString stringWithFormat:@"%@",newValue];
         NSMutableArray *sep_str = [[self.card.Name componentsSeparatedByString:kSeparateChar] mutableCopy];
         for (int i=0;i<sep_str.count;i++){
             NSString *str = sep_str[i];
@@ -475,11 +453,9 @@
                 }
             }
         }
-        
         self.card.Name = [sep_str componentsJoinedByString:@"|"];
-        //self.card.Name = newValue;
-    }else if ([name isEqualToString:@"公司"]){
-//        self.card.CompanyName = [NSString stringWithFormat:@"%@",newValue];
+    }
+    else if ([name isEqualToString:@"公司"]){
         NSMutableArray *sep_str = [[self.card.CompanyName componentsSeparatedByString:kSeparateChar] mutableCopy];
         for (int i=0;i<sep_str.count;i++){
             NSString *str = sep_str[i];
@@ -491,11 +467,9 @@
                 }
             }
         }
-        
         self.card.CompanyName = [sep_str componentsJoinedByString:@"|"];
-        //self.card.CompanyName = newValue;
-    }else if ([name isEqualToString:@"职称"]){
-//        self.card.Position = [NSString stringWithFormat:@"%@",newValue];
+    }
+    else if ([name isEqualToString:@"职称"]){
         NSMutableArray *sep_str = [[self.card.Position componentsSeparatedByString:kSeparateChar] mutableCopy];
         for (int i=0;i<sep_str.count;i++){
             NSString *str = sep_str[i];
@@ -509,9 +483,8 @@
         }
         
         self.card.Position = [sep_str componentsJoinedByString:@"|"];
-        //self.card.Position = newValue;
-    }else if ([name isEqualToString:@"手机"]){
-//        self.card.Mobilphone = [NSString stringWithFormat:@"%@",newValue];
+    }
+    else if ([name isEqualToString:@"手机"]){
         NSMutableArray *sep_str = [[self.card.Mobilphone componentsSeparatedByString:kSeparateChar] mutableCopy];
         for (int i=0;i<sep_str.count;i++){
             NSString *str = sep_str[i];
@@ -525,9 +498,7 @@
         }
         
         self.card.Mobilphone = [sep_str componentsJoinedByString:@"|"];
-        //self.card.Mobilphone = newValue;
     }else if ([name isEqualToString:@"固话"]){
-//        self.card.Telephone = [NSString stringWithFormat:@"%@",newValue];
         NSMutableArray *sep_str = [[self.card.Telephone componentsSeparatedByString:kSeparateChar] mutableCopy];
         for (int i=0;i<sep_str.count;i++){
             NSString *str = sep_str[i];
@@ -541,9 +512,7 @@
         }
         
         self.card.Telephone = [sep_str componentsJoinedByString:@"|"];
-        //self.card.Telephone = newValue;
     }else if ([name isEqualToString:@"传真"]){
-//        self.card.Fax = [NSString stringWithFormat:@"%@",newValue];
         NSMutableArray *sep_str = [[self.card.Fax componentsSeparatedByString:kSeparateChar] mutableCopy];
         for (int i=0;i<sep_str.count;i++){
             NSString *str = sep_str[i];
@@ -557,9 +526,7 @@
         }
         
         self.card.Fax = [sep_str componentsJoinedByString:@"|"];
-        //self.card.Fax = newValue;
     }else if ([name isEqualToString:@"邮箱"]){
-//        self.card.Email = [NSString stringWithFormat:@"%@",newValue];
         NSMutableArray *sep_str = [[self.card.Email componentsSeparatedByString:kSeparateChar] mutableCopy];
         for (int i=0;i<sep_str.count;i++){
             NSString *str = sep_str[i];
@@ -573,9 +540,7 @@
         }
         
         self.card.Email = [sep_str componentsJoinedByString:@"|"];
-        //self.card.Email = newValue;
     }else if ([name isEqualToString:@"地址"]){
-//        self.card.Address = [NSString stringWithFormat:@"%@",newValue];
         NSMutableArray *sep_str = [[self.card.Address componentsSeparatedByString:kSeparateChar] mutableCopy];
         for (int i=0;i<sep_str.count;i++){
             NSString *str = sep_str[i];
@@ -590,7 +555,6 @@
         
         self.card.Address = [sep_str componentsJoinedByString:@"|"];
     }else if ([name isEqualToString:@"备注"]){
-//        self.card.Remark = [NSString stringWithFormat:@"%@",newValue];
         NSMutableArray *sep_str = [[self.card.Remark componentsSeparatedByString:kSeparateChar] mutableCopy];
         for (int i=0;i<sep_str.count;i++){
             NSString *str = sep_str[i];
@@ -604,7 +568,6 @@
         }
         
         self.card.Remark = [sep_str componentsJoinedByString:@"|"];
-        //self.card.Remark = newValue;
     }
     
     self.isChangedDataSource = YES;
@@ -797,11 +760,6 @@
         [alert show];
         return;
     }
-    /*if([self.card.Email isEqualToString:@""]||self.card.Email==nil){
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"邮件不能为空" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
-        return;
-    }*/
     //电话
     /*if (self.card.Telephone!=nil) {
         BOOL isValid = [IdentifierValidator isValid:IdentifierTypePhone value:self.card.Telephone];
@@ -822,11 +780,11 @@
         }
     }*/
     
-    //邮件
+    //邮箱
     /*if (self.card.Email!=nil) {
         BOOL isValid = [IdentifierValidator isValid:IdentifierTypeEmail value:self.card.Email];
         if (!isValid) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"邮件格式不正确" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"邮箱格式不正确" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alert show];
             return;
         }

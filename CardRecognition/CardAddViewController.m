@@ -384,7 +384,7 @@
         return;
     }
     /*if(card.mail==nil){
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"邮件名称不能为空" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"邮箱名称不能为空" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
         return;
     }*/
@@ -416,7 +416,7 @@
     /*if (card.mail!=nil) {
         BOOL isValid = [IdentifierValidator isValid:IdentifierTypeEmail value:card.mail];
         if (!isValid) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"邮件格式不正确" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"邮箱格式不正确" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alert show];
             return;
         }

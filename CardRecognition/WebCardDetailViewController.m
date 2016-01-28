@@ -28,7 +28,7 @@
     [super viewDidLoad];
     
     //
-    mainDataTitle = [NSArray arrayWithObjects:@"姓名",@"公司",@"职称",@"手机",@"固话",@"传真",@"邮件",@"地址",@"备注", nil ];
+    mainDataTitle = [NSArray arrayWithObjects:@"姓名",@"公司",@"职称",@"手机",@"固话",@"传真",@"邮箱",@"地址",@"备注", nil ];
     addDataTitle = [NSArray arrayWithObjects:@"分组",@"行业",@"地区", nil];
     // Do any additional setup after loading the view.
     //初始化主View

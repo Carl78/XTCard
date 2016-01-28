@@ -190,7 +190,7 @@
             card.fax = [self parseProperty:card.fax appendValue:[VVV objectAtIndex:i]];
         }else if ([key isEqualToString:@"手机 *"]) {
             card.mobile = [self parseProperty:card.mobile appendValue:[VVV objectAtIndex:i]];
-        }else if ([key isEqualToString:@"邮件"]) {
+        }else if ([key isEqualToString:@"邮箱"]) {
             card.mail = [self parseProperty:card.mail appendValue:[VVV objectAtIndex:i]];
         }else if ([key isEqualToString:@"网址"]) {
             card.url = [self parseProperty:card.url appendValue:[VVV objectAtIndex:i]];
@@ -447,7 +447,7 @@
     [imageView setImage:[UIImage imageNamed:@"person_thumb"]];
     [viewA addSubview:imageView];
     
-    UILabel *nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(120, self.scrollView.frame.size.height/2-50, self.scrollView.frame.size.width-120, 10)];
+    UILabel *nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(120, self.scrollView.frame.size.height/2-50, self.scrollView.frame.size.width-120, 40)];
     nameLabel.text = strName;
     nameLabel.textColor = [UIColor colorWithRed:((float)((kMenuCellBGColor & 0xFF0000) >> 16))/255.0 green:((float)((kMenuCellBGColor & 0xFF00) >> 8))/255.0 blue:((float)(kMenuCellBGColor & 0xFF))/255.0 alpha:1.0];
     [nameLabel setFont:[UIFont fontWithName:@"STHeitiSC-Medium" size:20.00]];
@@ -573,10 +573,10 @@
                 return;
             }*/
             card.mobile = [self parseProperty:card.mobile appendValue:[values objectAtIndex:i]];
-        }else if ([key isEqualToString:@"邮件"]) {
+        }else if ([key isEqualToString:@"邮箱"]) {
             /*BOOL isValid = [IdentifierValidator isValid:IdentifierTypeEmail value:[values objectAtIndex:i]];
             if (!isValid) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"邮件格式不正确" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"邮箱格式不正确" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [alert show];
                 return;
             }*/
@@ -696,7 +696,7 @@
             keyName = @"手机";
             break;
         case eCardMailItem:
-            keyName = @"邮件";
+            keyName = @"邮箱";
             break;
         case eCardURLItem:
             keyName = @"网址";
@@ -918,7 +918,30 @@
 }
 */
 
-#pragma mark -
+#pragma mark - AlertViewDelegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    if (alertView.tag==100) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }else{
+        if (buttonIndex == 1) {
+            NSString *key = alertView.message;
+            NSString *value = [alertView textFieldAtIndex:0].text;
+            
+            if (value==nil || [[value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {
+                [SVProgressHUD showErrorWithStatus:@"无效内容, 无法添加" duration:1];
+            }else{
+                [keys addObject:key];
+                [values addObject:value];
+                
+                [tableView reloadData];
+            }
+        }
+    }
+}
+
+#pragma mark - selector 方法
 
 -(void)addProperty:(UIButton *)sender{
     
@@ -932,63 +955,9 @@
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"添加属性" message:[NSString stringWithFormat:@"%@",context] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
         [alertView show];
-        
-//        for (NSString *title in keys) {
-//            if ([context isEqualToString:title]) {
-//                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"操作失败" message:@"该属性已被添加显示" delegate:nil cancelButtonTitle:@"确认" otherButtonTitles:nil];
-//                [alert show];
-//                return;
-//            }
-//        }
-//        
-//        if ([context isEqualToString:@"姓名"]) {
-//            
-//            
-//        }else if ([context isEqualToString:@"职称"]){
-//            
-//        }else if ([context isEqualToString:@"公司"]){
-//            
-//        }else if ([context isEqualToString:@"邮编"]){
-//            
-//        }else if ([context isEqualToString:@"传真"]){
-//            
-//        }else if ([context isEqualToString:@"手机"]){
-//            
-//        }else if ([context isEqualToString:@"固话"]){
-//            
-//        }else if ([context isEqualToString:@"邮箱"]){
-//            
-//        }else if ([context isEqualToString:@"地址"]){
-//            
-//        }else if ([context isEqualToString:@"备注"]){
-//            
-//        }
-        
-        
     }];
 }
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
-    if (alertView.tag==100) {
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    }else{
-        if (buttonIndex == 1) {
-            NSString *key = alertView.message;
-            NSString *value = [alertView textFieldAtIndex:0].text;
-            
-            if (value==nil || [[value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {
-                [SVProgressHUD showErrorWithStatus:@"非法参数, 无法添加" duration:1];
-            }else{
-                [keys addObject:key];
-                [values addObject:value];
-                
-                [tableView reloadData];
-            }
-        }
-    
-    
-    }
-}
+
 
 -(BOOL)checkCard:(DBCard *)card{
     if (card.name == nil || [card.name isEqualToString:@""]) {
@@ -1008,7 +977,7 @@
         return NO;
     }
     /*if (card.mail == nil || [card.mail isEqualToString:@""]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"警告" message:@"缺少邮件属性,请填写完整" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"警告" message:@"缺少邮箱属性,请填写完整" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alertView show];
         return NO;
     }*/
